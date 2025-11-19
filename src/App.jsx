@@ -1,73 +1,108 @@
+import { useState } from "react";
+import { Sparkles, Heart, Gift } from "lucide-react";
+import { motion } from "framer-motion";
+import Header from "./components/Header";
+import Gallery from "./components/Gallery";
+import Countdown from "./components/Countdown";
+import Wishes from "./components/Wishes";
+
 function App() {
+  const [name, setName] = useState("Sis");
+  const [date, setDate] = useState(() => {
+    const now = new Date();
+    const thisYear = now.getFullYear();
+    // Default to 1 month from now
+    const d = new Date(now);
+    d.setMonth(d.getMonth() + 1);
+    return d.toISOString().slice(0, 10);
+  });
+  const [wishes, setWishes] = useState([
+    "Wishing you endless joy and smiles!",
+    "May this year be your brightest yet.",
+  ]);
+
+  const addWish = (t) => setWishes((w) => [t, ...w]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-fuchsia-700 via-indigo-900 to-slate-900">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute -top-24 -left-24 w-80 h-80 bg-fuchsia-500/30 blur-3xl rounded-full" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/20 blur-3xl rounded-full" />
+      </div>
 
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
+      <div className="max-w-6xl mx-auto px-4 py-10 sm:py-14">
+        <div className="flex items-center justify-between gap-4 mb-10">
+          <div className="flex items-center gap-3 text-pink-100">
+            <Sparkles className="w-6 h-6" />
+            <span className="font-semibold">Birthday Wishes</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="px-3 py-1.5 rounded-lg bg-white/10 text-white placeholder-white/50 ring-1 ring-white/15 focus:ring-pink-400/40 focus:outline-none"
+              placeholder="Sister's name"
+            />
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="px-3 py-1.5 rounded-lg bg-white/10 text-white placeholder-white/50 ring-1 ring-white/15 focus:ring-pink-400/40 focus:outline-none"
+            />
+          </div>
+        </div>
 
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
+        <div className="space-y-12">
+          <Header name={name} />
 
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
+          <div className="flex items-center justify-center">
+            <Countdown date={date} />
           </div>
 
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
+          <div className="grid md:grid-cols-2 gap-8 items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center gap-2 text-pink-100">
+                <Heart className="w-5 h-5" />
+                <h3 className="font-semibold uppercase tracking-wider text-xs">Gallery of memories</h3>
               </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
+              <Gallery />
+            </motion.div>
 
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center gap-2 text-pink-100">
+                <Gift className="w-5 h-5" />
+                <h3 className="font-semibold uppercase tracking-wider text-xs">Leave a wish</h3>
               </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
+              <Wishes onAdd={addWish} />
+              <ul className="space-y-2">
+                {wishes.map((w, i) => (
+                  <li key={i} className="p-3 rounded-xl bg-white/5 ring-1 ring-white/10 text-white/90">
+                    {w}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
+          <footer className="pt-6 text-center text-white/60 text-sm">
+            Made with love for {name || "you"} 💖
+          </footer>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
